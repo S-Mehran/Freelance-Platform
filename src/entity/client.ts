@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import  User  from "./User";
-
+import User  from "./User";
+import {Post} from "./job-post";
 
 @Entity({ name: "clients" })
 export class Client {
@@ -28,6 +28,10 @@ export class Client {
 
   @Column({ type: "numeric", precision: 10, scale: 2 })
   amount_spent: number
+
+  @OneToMany(() => Post, (post: Post) => post.client)
+  posts: Post[];
+
 
   @CreateDateColumn()
   createdAt: Date;

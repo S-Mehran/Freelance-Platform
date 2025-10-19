@@ -1,12 +1,21 @@
 import { Request, Response } from "express";
-import { userRepository } from "../repository/index";
+import { userRepository,
+  clientRepository,
+  freelancerRepository
+ } from "../repository/index";
 import { mailService } from "../service/mail.service";
+import { userRoles } from "../enum/user-roles.enum";
+import { Client } from "../entity/client";
+import { Freelancer } from "../entity/freelancer";
 export class UserController {
   static async getAllUsers(req: Request, res: Response) {
     const users = await userRepository.findAll();
     res.json(users);
   }
 
+  //const {patientId} = req.body
+  //patient = findbypatientId
+  //createAppointment(...req.body, patient)
   static async getUserByEmail(req: Request, res: Response) {
     const {email} = req.body
     const user = await userRepository.findByEmail(email)
@@ -19,6 +28,22 @@ export class UserController {
 
   static async createUser(req: Request, res: Response) {
     const user = await userRepository.createUser(req.body);
+    if (user.role===userRoles.CLIENT) {
+      let newClient = new Client()
+      const {mobile, amount_spent} = req.body
+      newClient.mobile = mobile
+      newClient.amount_spent = amount_spent
+      newClient.user = user
+      await clientRepository.createClient(newClient)
+    }
+    if (user.role===userRoles.FREELANCER) {
+      let newFreelancer = new Freelancer()
+      const {status, fieldOfExpertise} = req.body
+      newFreelancer.fieldOfExpertise = fieldOfExpertise
+      newFreelancer.status = status
+      newFreelancer.user = user
+      await freelancerRepository.createFreelancer(newFreelancer)
+    }
     res.status(201).json(user);
   }
 

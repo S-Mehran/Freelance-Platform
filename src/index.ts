@@ -5,6 +5,8 @@ import express from "express"
 import {userRouter} from "../src/routes/user.routes"
 import { authRouter } from "./routes/auth.routes"
 import { protectedRouter } from "./routes/protected.routes"
+import postRouter from "./routes/job-post.route"
+
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
@@ -12,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 app.use("/api", authRouter);
 app.use("/api", userRouter);
 app.use("/api", protectedRouter)
+app.use("/api", postRouter)
 
 AppDataSource.initialize().then(async () => {
     app.listen(PORT, () => {

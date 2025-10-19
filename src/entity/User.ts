@@ -5,12 +5,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   OneToOne,
-  JoinColumn
+  JoinColumn,
+  OneToMany
 } from "typeorm";
 import {userRoles} from '../enum/user-roles.enum'
 import {Client} from './client'
 import { Freelancer } from "./freelancer";
-
 @Entity({ name: "users" })
 export default class User {
   @PrimaryGeneratedColumn()
