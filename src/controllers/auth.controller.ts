@@ -6,13 +6,15 @@ import { mailService } from "../service/mail.service";
 export class AuthController {
   static async registerUser(req: Request, res: Response) {
     const user = await userRepository.createUser(req.body);
+    const userWithOtp = await userRepository.generateOtp(user.email)
+    const sendOtp = await mailService.sendOtpMail(user.email, userWithOtp.otpCode)
     res.status(201).json(user);
   }
   
   static async sendOtp(req: Request, res: Response) {
     const {email} = req.body
-    const user = userRepository.generateOtp(email)
-    const sentOtp = await mailService.sendOtpMail(email, (await user).otpCode)
+    const user = await userRepository.generateOtp(email)
+    const sentOtp = await mailService.sendOtpMail(email, user.otpCode)
     res.status(200).json({message: "email sent successfully"})
   }
 
@@ -25,7 +27,7 @@ export class AuthController {
     res.status(200).json({message: "User Verified"});
   }
 
-  static async forgotPassword(req: Request, res: Response) {
+  static async resetPassword(req: Request, res: Response) {
     const {email, newPassword, confirmPassword} = req.body
     const user = await userRepository.updatePassword(email, newPassword, confirmPassword)
     if (!user) {

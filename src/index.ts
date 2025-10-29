@@ -6,8 +6,9 @@ import {userRouter} from "../src/routes/user.routes"
 import { authRouter } from "./routes/auth.routes"
 import { protectedRouter } from "./routes/protected.routes"
 import postRouter from "./routes/job-post.route"
-
+import cors from 'cors'
 const app = express();
+app.use(cors())
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 

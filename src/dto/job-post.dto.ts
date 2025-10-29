@@ -1,23 +1,59 @@
 //Implement dto for freelancer and client. e.g. review be between 0 and 5
-
-import { IsString, IsEmail, IsOptional, IsEnum, Length } from "class-validator";
-import { userRoles } from "../enum/user-roles.enum";
+import { IsString, IsOptional, IsEnum, Length, IsNumber, 
+  IsArray, 
+  ArrayNotEmpty,
+  ArrayMinSize,
+ } from "class-validator";
+import { levelOfExpertise } from "../enum/level-of-expertise.enum";
+import { projectType } from "../enum/project-type.enum";
 
 export class PostDto {
   @IsString()
-  firstName: string;
+  title: string;
 
   @IsString()
-  lastName: string;
+  summary: string;
 
-  @IsEmail()
-  email: string;
+  @IsNumber({}, { message: "Price must be a number" })
+  price: string;
 
+  @IsEnum(levelOfExpertise, { message: "Options are entry level, intermediate and expert" })
+  levelOfExpertise: levelOfExpertise;
+
+  @IsArray({ message: "Skills must be provided as an array" })
+  @ArrayMinSize(1, { message: "At least one skill must be specified" })
+  skillsRequired: string[]
+
+  @IsEnum(projectType, { message: "Project option not valid" })
+  projectType: projectType;
+
+}
+
+export class UpdateJobPostDto {
+  @IsOptional()
   @IsString()
-  @Length(8, 30, {message: "Password must be between 8 and 30 characters long"})
-  password: string;
+  title?: string;
 
   @IsOptional()
-  @IsEnum(userRoles, { message: "Role must be one of: admin, freelancer, client" })
-  role: userRoles;
+  @IsString()
+  summary?: string;
+
+  @IsOptional()
+  @IsNumber({}, { message: "Price must be a number" })
+  price?: number;
+
+  @IsOptional()
+  @IsEnum(levelOfExpertise, {
+    message: "Options are entry level, intermediate, and expert",
+  })
+  levelOfExpertise?: levelOfExpertise;
+
+  @IsOptional()
+  @IsArray({ message: "Skills must be provided as an array" })
+  @ArrayMinSize(1, { message: "At least one skill must be specified" })
+  skillsRequired?: string[];
+
+  @IsOptional()
+  @IsEnum(projectType, { message: "Project option not valid" })
+  projectType?: projectType;
 }

@@ -21,3 +21,28 @@ export class UserDto {
   @IsEnum(userRoles, { message: "Role must be one of: admin, freelancer, client" })
   role: userRoles;
 }
+
+
+
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  firstName?: string;
+
+  @IsOptional()
+  @IsString()
+  lastName?: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  @Length(8, 30, { message: "Password must be between 8 and 30 characters long" })
+  password?: string;
+
+  @IsOptional()
+  @IsEnum(userRoles, { message: "Role must be one of: admin, freelancer, client" })
+  role?: userRoles;
+}

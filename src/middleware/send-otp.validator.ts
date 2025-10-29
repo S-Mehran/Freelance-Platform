@@ -1,14 +1,14 @@
 import { plainToClass } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 import { NextFunction, Request, Response } from "express";
-import { otpVerifyDto } from "../dto/verify-otp.dto";
+import { otpSendDto } from "../dto/send-otp.dto";
 
 export const otpValidator = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const verifyDto = plainToClass(otpVerifyDto, req.body); // convert plain object to class instance and also do type conversion
+  const verifyDto = plainToClass(otpSendDto, req.body); // convert plain object to class instance and also do type conversion
   const errors: ValidationError[] = await validate(verifyDto); // validate the class instance
 
   if (errors.length > 0) {
