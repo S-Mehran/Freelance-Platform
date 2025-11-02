@@ -4,17 +4,12 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
   ManyToOne,
-  OneToMany
 } from "typeorm";
-import {userRoles} from '../enum/user-roles.enum'
+
 import {Client} from './client'
-import { Freelancer } from "./freelancer";
 import { levelOfExpertise } from "../enum/level-of-expertise.enum";
 import { projectType } from "../enum/project-type.enum";
-import User from "./User";
 
 @Entity({ name: "posts" })
 export class Post {

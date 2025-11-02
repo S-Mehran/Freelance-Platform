@@ -6,12 +6,12 @@ export const authentication = async (
   res: Response,
   next: NextFunction
 ) => {
-  const header = req.headers.authorization;
-  if (!header) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
+  const token = req.cookies.access_token;
+  // if (!header) {
+  //   return res.status(401).json({ message: "Unauthorized" });
+  // }
   console.log("auth")
-  const token = header.split(" ")[1];
+  // const token = header.split(" ")[1];
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }

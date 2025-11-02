@@ -7,9 +7,22 @@ import { authRouter } from "./routes/auth.routes"
 import { protectedRouter } from "./routes/protected.routes"
 import postRouter from "./routes/job-post.route"
 import cors from 'cors'
+import cookieParser from "cookie-parser"
+
 const app = express();
-app.use(cors())
+//app.use(cors())
 app.use(express.json());
+app.use(cookieParser())
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", // your frontend URL
+    credentials: true, // allow cookies
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // include OPTIONS
+    allowedHeaders: ["Content-Type", "Authorization"], // important for preflight
+  })
+);
+
 const PORT = process.env.PORT || 3000;
 
 app.use("/api", authRouter);

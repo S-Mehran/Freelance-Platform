@@ -38,6 +38,7 @@ export class AuthController {
   }
 
   static async loginUser(req: Request, res: Response) {
+    console.log("Request Recieved")
     const { email, password } = req.body;
     const user = await userRepository.findByEmail(email);
     // if (user) {
@@ -46,9 +47,19 @@ export class AuthController {
     if (!user || !(await Encrypt.comparePassword(password, user.password))) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const token = await Encrypt.generateToken({ id: user.id });
+    const accessToken = await Encrypt.generateToken({ id: user.id });
     const refreshToken = await Encrypt.generateRefreshToken({ id: user.id });
-    res.status(200).json({ user, token, refreshToken });
+    res.cookie("access_token", accessToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure:false,
+    })
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure:false,
+    })
+    res.status(200).json({ user });
   }
 
   static async refreshToken(req: Request, res: Response) {

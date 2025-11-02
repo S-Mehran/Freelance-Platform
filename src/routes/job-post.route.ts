@@ -7,8 +7,8 @@ import { postValidator } from "../middleware/job-post.validator";
 import { updatePostValidator } from "../middleware/validators/update-post.validator";
 const postRouter = express.Router()
 
-
-postRouter.post('/create-post', postValidator, authentication, postAuthorization(userRoles.CLIENT), PostController.createPost)
+// 
+postRouter.post('/create-post',postValidator, authentication, postAuthorization(userRoles.CLIENT), PostController.createPost)
 postRouter.put('/update-post/:id', updatePostValidator, authentication, postAuthorization(userRoles.CLIENT), PostController.updatePost)
 postRouter.delete('/delete-post/:id', authentication, postAuthorization(userRoles.CLIENT), PostController.deletePost)
 postRouter.get('post/:id', authentication, postAuthorization(userRoles.CLIENT), PostController.findPostById)

@@ -12,14 +12,16 @@ export class PostDto {
   title: string;
 
   @IsString()
+  @IsOptional()
   summary: string;
 
   @IsNumber({}, { message: "Price must be a number" })
   price: string;
 
   @IsEnum(levelOfExpertise, { message: "Options are entry level, intermediate and expert" })
-  levelOfExpertise: levelOfExpertise;
+  levelofExpertise: levelOfExpertise;
 
+  @IsOptional()
   @IsArray({ message: "Skills must be provided as an array" })
   @ArrayMinSize(1, { message: "At least one skill must be specified" })
   skillsRequired: string[]
