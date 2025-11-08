@@ -9,7 +9,9 @@ export const updatePostValidator = async (
   next: NextFunction
 ) => {
   const updatePostDto = plainToInstance(UpdateJobPostDto, req.body); // convert plain object to class instance and also do type conversion
-  const errors: ValidationError[] = await validate(updatePostDto); // validate the class instance
+  const errors: ValidationError[] = await validate(updatePostDto, {
+    skipMissingProperties: true,
+  }); // validate the class instance
 
   if (errors.length > 0) {
     const errorMessages = errors

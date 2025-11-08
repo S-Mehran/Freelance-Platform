@@ -25,13 +25,13 @@ export class Post {
   @Column({ type: "decimal", precision: 10, scale: 2 })
   price: number;
 
-  @Column({ type: "enum", enum: levelOfExpertise })
-  levelofExpertise: levelOfExpertise;
+  @Column({ type: "enum", enum: levelOfExpertise, nullable:true})
+  levelOfExpertiseRequired: levelOfExpertise;
 
   @Column("simple-array", {nullable:true})
   skillsRequired: string[]
 
-  @Column({type: "enum", enum:projectType, nullable:true})
+  @Column({type: "enum", enum:projectType})
   projectType: projectType
 
   @ManyToOne(()=>Client, (client:Client)=>client.posts)

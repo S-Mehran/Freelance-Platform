@@ -18,7 +18,7 @@ export class PostController{
             const clientId = req.body.client.id
             const client = await clientRepository.findById(clientId)
             if (!client) {
-                return res.status(200).json({message: "Client not found"})
+                return res.status(404).json({message: "Client not found"})
             }
             console.log('Entered 1')
             const upload = await postRepository.createPost({...req.body, client})
@@ -36,9 +36,10 @@ export class PostController{
         const isDeleted = await postRepository.deletePost(postId);
         if (!isDeleted) {
             return res.status(404).json({ message: "Post not found" });
-        } else {
-            return res.status(204);
-        }
+        } 
+            
+        return res.status(200).json({message: "Post Deleted Successfully"});
+        
     }catch(error) {
         return res.status(500).json({message: "Failed to delete post"})
     }
@@ -47,8 +48,11 @@ export class PostController{
   static async updatePost(req: Request, res: Response) {
     try{
     const postId = Number(req.params.id);
-    const user = await postRepository.updatePost(postId, req.body);
-    return res.status(200).json(user);
+    const updatedPost = await postRepository.updatePost(postId, req.body);
+    if (!updatedPost) {
+        return res.status(400).json("Failed to Update Post. Try Again Later");        
+    }
+    return res.status(200).json(updatedPost);
     } catch(error) {
         return res.status(500).json({message: "Error occured while creating post"})
     }

@@ -20,18 +20,14 @@ export class Client {
   @JoinColumn()
   user: User;
 
-  @Column({ nullable: true })
-  mobile: string;
+  @Column({ type: "numeric", precision: 10, scale: 2, default: 0.00 })
+  amountSpent: number
 
-  @Column({ nullable: true })
-  address: string;
-
-  @Column({ type: "numeric", precision: 10, scale: 2 })
-  amount_spent: number
+  @Column({default: 0})
+  numberOfHires: number
 
   @OneToMany(() => Post, (post: Post) => post.client)
   posts: Post[];
-
 
   @CreateDateColumn()
   createdAt: Date;

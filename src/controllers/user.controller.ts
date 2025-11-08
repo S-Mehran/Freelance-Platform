@@ -30,17 +30,11 @@ export class UserController {
     const user = await userRepository.createUser(req.body);
     if (user.role===userRoles.CLIENT) {
       let newClient = new Client()
-      const {mobile, amount_spent} = req.body
-      newClient.mobile = mobile
-      newClient.amount_spent = amount_spent
       newClient.user = user
       await clientRepository.createClient(newClient)
     }
     if (user.role===userRoles.FREELANCER) {
       let newFreelancer = new Freelancer()
-      const {status, fieldOfExpertise} = req.body
-      newFreelancer.fieldOfExpertise = fieldOfExpertise
-      newFreelancer.status = status
       newFreelancer.user = user
       await freelancerRepository.createFreelancer(newFreelancer)
     }

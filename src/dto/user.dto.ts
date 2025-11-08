@@ -2,7 +2,8 @@
 
 import { IsString, IsEmail, IsOptional, IsEnum, Length } from "class-validator";
 import { userRoles } from "../enum/user-roles.enum";
-
+import { UniqueOnDatabase } from "../helpers/unique-validation";
+import { User } from "../entity";
 export class UserDto {
   @IsString()
   firstName: string;
@@ -11,6 +12,7 @@ export class UserDto {
   lastName: string;
 
   @IsEmail()
+  @UniqueOnDatabase(User)
   email: string;
 
   @IsString()

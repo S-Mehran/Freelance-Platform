@@ -31,6 +31,9 @@ export default class User {
   @Column({ type: "enum", enum: userRoles })
   role: userRoles;
 
+  @Column({default:"Pakistan"})
+  country: string;
+
   @OneToOne(()=>Client, (client: Client)=>client.user, {cascade:true})
   client:Client;
 

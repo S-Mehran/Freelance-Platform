@@ -21,20 +21,17 @@ export class Freelancer {
   @JoinColumn()
   user: User;
 
-  @Column({ nullable: true })
-  mobile: string;
-
-  @Column({ nullable: true })
-  address: string;
-
   @Column({nullable:true, default:0})
-  jobs: number
+  numberOfJobs: number
 
-  @Column("simple-array")
-  fieldOfExpertise: string[]
+  @Column("text", { array: true, default: () => 'ARRAY[]::text[]' })
+  fieldOfExpertise: string[];
 
   @Column({default: "available"})
   status: string
+
+  @Column({type: "decimal", precision: 10, scale: 2, default: 4.99})
+  hourlyRate: number
 
   @CreateDateColumn()
   createdAt: Date;

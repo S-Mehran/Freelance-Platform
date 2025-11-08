@@ -6,7 +6,10 @@ export class PostService{
     constructor(private postRepository: Repository<Post>) {}
 
     async findById(id: number): Promise<Post | null> {
-        return this.postRepository.findOneBy({ id });
+        return this.postRepository.findOne({ 
+            where: {id},
+            relations: ['client'],
+         });
       }
 
     async createPost(post: Post): Promise<Post> {
@@ -25,8 +28,8 @@ export class PostService{
    }
 
     async deletePost(id: number): Promise<boolean> {
-        const post = await this.postRepository.findOneBy({id})
-        if (!post) return false
+        //const post = await this.postRepository.findOneBy({id})
+        //if (!post) return false
         const result = await this.postRepository.delete(id)
         return result.affected!==0
     }
@@ -37,5 +40,6 @@ export class PostService{
 
         const updatedPost = this.postRepository.merge(getPost, post)
         await this.postRepository.save(updatedPost)
+        return updatedPost
     }
 }

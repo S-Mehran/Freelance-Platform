@@ -6,6 +6,7 @@ export const authentication = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("Enters?")
   const token = req.cookies.access_token;
   // if (!header) {
   //   return res.status(401).json({ message: "Unauthorized" });

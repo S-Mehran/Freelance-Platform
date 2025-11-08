@@ -10,7 +10,10 @@ export class UserService {
   }
 
   async findById(id: number): Promise<User | null> {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOne({
+      where: { id },
+      relations: ['client', 'freelancer'],
+    });
   }
 
   async findByEmail(email: string): Promise<User | null> {
