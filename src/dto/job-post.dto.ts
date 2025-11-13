@@ -19,7 +19,7 @@ export class PostDto {
   price: string;
 
   @IsEnum(levelOfExpertise, { message: "Options are entry level, intermediate and expert" })
-  levelofExpertise: levelOfExpertise;
+  levelOfExpertiseRequired: levelOfExpertise;
 
   @IsOptional()
   @IsArray({ message: "Skills must be provided as an array" })
@@ -48,7 +48,7 @@ export class UpdateJobPostDto {
   @IsEnum(levelOfExpertise, {
     message: "Options are entry level, intermediate, and expert",
   })
-  levelOfExpertise?: levelOfExpertise;
+  levelOfExpertiseRequired?: levelOfExpertise;
 
   @IsOptional()
   @IsArray({ message: "Skills must be provided as an array" })

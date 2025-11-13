@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { User } from "../entity/index";
 import Encrypt from "../helpers/encrypt.helper";
-
+const {MODE} = process.env
 export class UserService {
   constructor(private userRepository: Repository<User>) {}
 
@@ -61,7 +61,10 @@ export class UserService {
   }
   
   async generateOtp(email: string): Promise<User | null> {
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    let otp = Math.floor(100000 + Math.random() * 900000).toString();
+    if (MODE==="development") {
+      otp = "000000"
+    }
     const user = await this.userRepository.findOneBy({email})
     if (!user) return null
 

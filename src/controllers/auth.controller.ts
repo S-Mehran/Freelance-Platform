@@ -1,21 +1,40 @@
 import { Request, Response } from "express";
-import { userRepository } from "../repository/index";
+import { clientRepository, freelancerRepository, userRepository } from "../repository/index";
 import Encrypt from "../helpers/encrypt.helper";
 import { mailService } from "../service/mail.service";
+import { userRoles } from "../enum/user-roles.enum";
+import { Freelancer } from "../entity/freelancer";
+import { Client } from "../entity/client";
 
+
+const ACCESS_TOKEN_KEY = "access_token";
+const REFRESH_TOKEN_KEY = "refresh_token";
+const {MODE} = process.env
 export class AuthController {
   static async registerUser(req: Request, res: Response) {
     const user = await userRepository.createUser(req.body);
+    if (user.role===userRoles.FREELANCER) {
+      let newFreelancer = new Freelancer()
+      newFreelancer.user = user
+      await freelancerRepository.createFreelancer(newFreelancer)
+    }
+    if (user.role===userRoles.CLIENT) {
+      let newClient = new Client()
+      newClient.user = user
+      await clientRepository.createClient(newClient)
+    }
     const userWithOtp = await userRepository.generateOtp(user.email)
+    if (MODE!=="development"){
     const sendOtp = await mailService.sendOtpMail(user.email, userWithOtp.otpCode)
-    res.status(201).json(user);
+  }
+    return res.status(201).json(user);
   }
   
   static async sendOtp(req: Request, res: Response) {
     const {email} = req.body
     const user = await userRepository.generateOtp(email)
     const sentOtp = await mailService.sendOtpMail(email, user.otpCode)
-    res.status(200).json({message: "email sent successfully"})
+    return res.status(200).json({message: "email sent successfully"})
   }
 
   static async confirmOtp(req: Request, res: Response) {
@@ -24,7 +43,7 @@ export class AuthController {
     if (result===false) {
       return res.status(401).json({message: "Invalid OTP"})
     }
-    res.status(200).json({message: "User Verified"});
+    return res.status(200).json({message: "User Verified"});
   }
 
   static async resetPassword(req: Request, res: Response) {
@@ -33,7 +52,7 @@ export class AuthController {
     if (!user) {
       return res.status(401).json({message: "Invalid Email or Passwords does not match"})
     }
-    res.status(200).json({message: user});
+    return res.status(200).json({message: user});
 
   }
 
@@ -59,8 +78,22 @@ export class AuthController {
       sameSite: "lax",
       secure:false,
     })
-    res.status(200).json({ user });
+    return res.status(200).json({ user });
   }
+
+
+    static async profile(req: Request, res: Response) {
+    const user = req.headers["user"] as any;
+
+    const foundUser = await userRepository.findById(user.id);
+
+    if (foundUser) {
+      return res.status(200).json({message: foundUser});
+    } else {
+      return res.status(404).json({ message: "User not found" });
+    }
+  }
+
 
   static async refreshToken(req: Request, res: Response) {
     const { refreshToken } = req.body;
@@ -74,9 +107,17 @@ export class AuthController {
       const newRefreshToken = await Encrypt.generateRefreshToken({
         id: payload.id,
       });
-      res.status(200).json({ token: newToken, refreshToken: newRefreshToken });
+      return res.status(200).json({ token: newToken, refreshToken: newRefreshToken });
     } catch (error) {
-      res.status(401).json({ message: "Invalid refresh token" });
+      return res.status(401).json({ message: "Invalid refresh token" });
     }
   }
+
+
+    static async logout(req: Request, res: Response) {
+      console.log("Loggin out")
+      res.clearCookie(ACCESS_TOKEN_KEY);
+      res.clearCookie(REFRESH_TOKEN_KEY);
+      return res.status(200).json({ message: "Logged out successfully" });
+    }
 }

@@ -1,6 +1,7 @@
 import { Post } from "../entity/job-post";
 import { Repository } from "typeorm";
 import { postRepository } from "../repository";
+import { Client } from "../entity/client";
 
 export class PostService{
     constructor(private postRepository: Repository<Post>) {}
@@ -11,6 +12,19 @@ export class PostService{
             relations: ['client'],
          });
       }
+
+    async getPosts(skip: number, limit: number): Promise<Post[]> {
+        return this.postRepository.find({
+            skip: skip,
+            take: limit,
+        })
+    }
+
+    async countPosts(): Promise<number> {
+
+        let postCount = await this.postRepository.count()
+        return postCount
+    }
 
     async createPost(post: Post): Promise<Post> {
         try {
@@ -41,5 +55,20 @@ export class PostService{
         const updatedPost = this.postRepository.merge(getPost, post)
         await this.postRepository.save(updatedPost)
         return updatedPost
+    }
+
+
+    async findPostsByClientId(clientId: number): Promise<Post[]|null> {
+        const clientPosts = await this.postRepository.find({
+            where: {
+                client: {id: clientId},
+            },
+            relations: ["client"],
+        })
+        
+        if (!clientPosts) {
+            return null
+        }
+        return clientPosts
     }
 }

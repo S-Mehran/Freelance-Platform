@@ -34,7 +34,7 @@ export class Post {
   @Column({type: "enum", enum:projectType})
   projectType: projectType
 
-  @ManyToOne(()=>Client, (client:Client)=>client.posts)
+  @ManyToOne(()=>Client, (client:Client)=>client.posts, {eager:true})
   client: Client
 
   @CreateDateColumn()

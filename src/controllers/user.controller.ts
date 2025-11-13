@@ -10,7 +10,7 @@ import { Freelancer } from "../entity/freelancer";
 export class UserController {
   static async getAllUsers(req: Request, res: Response) {
     const users = await userRepository.findAll();
-    res.json(users);
+    return res.json(users);
   }
 
   //const {patientId} = req.body
@@ -23,7 +23,7 @@ export class UserController {
     if (!user) {
       return res.status(401).json({ message: "User not found" })
     }
-    res.status(200).json(user)
+    return res.status(200).json(user)
   }
 
   static async createUser(req: Request, res: Response) {
@@ -38,22 +38,22 @@ export class UserController {
       newFreelancer.user = user
       await freelancerRepository.createFreelancer(newFreelancer)
     }
-    res.status(201).json(user);
+    return res.status(201).json(user);
   }
 
   static async updateUser(req: Request, res: Response) {
     const userId = Number(req.params.id);
     const user = await userRepository.updateUser(userId, req.body);
-    res.status(200).json(user);
+    return res.status(200).json(user);
   }
 
   static async deleteUser(req: Request, res: Response) {
     const userId = Number(req.params.id);
     const isDeleted = await userRepository.delete(userId);
     if (!isDeleted) {
-      res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     } else {
-      res.status(200).json(null);
+      return res.status(200).json(null);
     }
   }
 }
