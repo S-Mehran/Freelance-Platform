@@ -3,6 +3,7 @@ import { IsString, IsOptional, IsEnum, Length, IsNumber,
   IsArray, 
   ArrayNotEmpty,
   ArrayMinSize,
+  IsNumberString,
  } from "class-validator";
 import { levelOfExpertise } from "../enum/level-of-expertise.enum";
 import { projectType } from "../enum/project-type.enum";
@@ -16,7 +17,7 @@ export class PostDto {
   summary: string;
 
   @IsNumber({}, { message: "Price must be a number" })
-  price: string;
+  price: number;
 
   @IsEnum(levelOfExpertise, { message: "Options are entry level, intermediate and expert" })
   levelOfExpertiseRequired: levelOfExpertise;

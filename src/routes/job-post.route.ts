@@ -16,5 +16,6 @@ postRouter.delete('/delete-post/:id', authentication, updatePostAuthorization(us
 postRouter.get('/post/:id', /*authentication, postAuthorization(userRoles.CLIENT),*/ PostController.findPostById)
 postRouter.get('/get-posts',/* authentication, postAuthorization(userRoles.CLIENT),*/ PostController.getAllPosts)
 postRouter.get('/get-my-posts', authentication, getClientPostAuthorization(userRoles.CLIENT), PostController.getClientPosts)
+postRouter.get('/my-post/:id', authentication, updatePostAuthorization(userRoles.CLIENT), PostController.findPostById)
 
 export default postRouter
