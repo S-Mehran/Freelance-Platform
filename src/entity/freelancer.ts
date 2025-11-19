@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import  User  from "./User";
+import { Proposal } from "./proposal";
 
 
 @Entity({ name: "freelancers" })
@@ -32,6 +33,10 @@ export class Freelancer {
 
   @Column({type: "decimal", precision: 10, scale: 2, default: 4.99})
   hourlyRate: number
+
+  @OneToMany(() => Proposal, (proposal: Proposal) => proposal.post)
+  proposals: Proposal[];
+
 
   @CreateDateColumn()
   createdAt: Date;

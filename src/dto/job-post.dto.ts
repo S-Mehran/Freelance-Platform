@@ -5,6 +5,7 @@ import { IsString, IsOptional, IsEnum, Length, IsNumber,
   ArrayMinSize,
   IsNumberString,
  } from "class-validator";
+import { Transform } from "class-transformer";
 import { levelOfExpertise } from "../enum/level-of-expertise.enum";
 import { projectType } from "../enum/project-type.enum";
 
@@ -16,6 +17,11 @@ export class PostDto {
   @IsOptional()
   summary: string;
 
+  @Transform(({ value }) => {
+    if (value === "" || value === null || value === undefined) return value;
+    const num = Number(value);
+    return Number.isNaN(num) ? value : num;
+  })
   @IsNumber({}, { message: "Price must be a number" })
   price: number;
 
@@ -42,6 +48,11 @@ export class UpdateJobPostDto {
   summary?: string;
 
   @IsOptional()
+  @Transform(({ value }) => {
+    if (value === "" || value === null || value === undefined) return undefined;
+    const num = Number(value);
+    return Number.isNaN(num) ? value : num;
+  })
   @IsNumber({}, { message: "Price must be a number" })
   price?: number;
 

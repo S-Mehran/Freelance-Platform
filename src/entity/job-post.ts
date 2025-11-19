@@ -5,9 +5,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany
 } from "typeorm";
 
 import {Client} from './client'
+import { Proposal } from "./proposal";
 import { levelOfExpertise } from "../enum/level-of-expertise.enum";
 import { projectType } from "../enum/project-type.enum";
 
@@ -36,6 +38,9 @@ export class Post {
 
   @ManyToOne(()=>Client, (client:Client)=>client.posts, {eager:true})
   client: Client
+
+  @OneToMany(() => Proposal, (proposal: Proposal) => proposal.post)
+  proposals: Proposal[];
 
   @CreateDateColumn()
   createdAt: Date;
