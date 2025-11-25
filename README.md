@@ -145,3 +145,107 @@ src
 │
 ├── data-source.ts
 └── index.ts
+
+
+# 🛠 Tech Stack
+
+-   **Node.js**
+-   **Express.js**
+-   **TypeScript**
+-   **PostgreSQL**
+-   **TypeORM**
+-   **Supabase (Optional)**
+-   **Nodemailer + Mailtrap**
+-   **JWT + Bcrypt**
+-   **Postman for API Testing**
+
+------------------------------------------------------------------------
+
+# 🔗 API Endpoints Overview
+
+## **Authentication**
+
+  Method   Endpoint                 Description
+  -------- ------------------------ ---------------------
+  POST     `/auth/register`         Register a new user
+  POST     `/auth/send-otp`         Send OTP to email
+  POST     `/auth/confirm-otp`      Confirm OTP code
+  POST     `/auth/login`            Login user
+  POST     `/auth/reset-password`   Reset password
+
+------------------------------------------------------------------------
+
+## **Client Job Post Routes**
+
+  Method   Endpoint                 Description
+  -------- ------------------------ ---------------------------------------
+  POST     `/client/job-post`       Create a new job post
+  PATCH    `/client/job-post/:id`   Update own job post
+  DELETE   `/client/job-post/:id`   Delete own post
+  GET      `/client/my-posts`       Get posts created by logged-in client
+
+------------------------------------------------------------------------
+
+## **Freelancer Routes**
+
+  Method   Endpoint                  Description
+  -------- ------------------------- --------------------------
+  GET      `/freelancer/job-posts`   View available job posts
+
+------------------------------------------------------------------------
+
+# ⚙️ Setup & Installation
+
+## 1️⃣ Clone the repository
+
+``` bash
+git clone <repo-url>
+cd freelancer-backend
+```
+
+## 2️⃣ Install dependencies
+
+``` bash
+npm install
+```
+
+## 3️⃣ Environment variables
+
+Create a `.env` file:
+
+``` ini
+DATABASE_URL=postgres://...
+JWT_SECRET=...
+MAILTRAP_USER=...
+MAILTRAP_PASS=...
+```
+
+## 4️⃣ Run migrations
+
+``` bash
+npm run typeorm migration:run
+```
+
+## 5️⃣ Start development server
+
+``` bash
+npm run dev
+```
+
+------------------------------------------------------------------------
+
+# 🧩 Future Enhancements
+
+-   Proposal system\
+-   Real-time notifications\
+-   Admin dashboards\
+-   Payment integration\
+-   Project milestones & messaging
+
+------------------------------------------------------------------------
+
+# 👨‍💻 Author
+
+**Mehran Shah**\
+Backend Developer --- Node.js \| TypeScript \| SQL \| Supabase
+
