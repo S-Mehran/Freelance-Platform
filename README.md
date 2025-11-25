@@ -1,3 +1,37 @@
+# Freelancer Platform Backend (Node.js + TypeScript)
+
+This repository contains the backend codebase for a **Freelancer Marketplace Platform**.  
+It includes secure authentication using OTP, user role separation (Client, Freelancer, Admin), job posting features, and protected routes.
+
+---
+
+## 📌 Features Overview
+
+### 🔐 Authentication & Security
+- OTP verification through **Mailtrap**
+- JWT-based login sessions
+- Bcrypt password hashing
+- Request validation (DTO + Validators)
+- Role-based route authorization
+
+### 👤 User Roles
+- **Client** – Create/Update/Delete job posts, view own posts
+- **Freelancer** – Browse posts, (future: proposals)
+- **Admin** – (future: system-level control)
+
+### 🧱 Job Post Features
+- Create a job post  
+- Update a job post  
+- Delete a job post  
+- Get all posts belonging to the logged-in client (**Get My Posts**)  
+- Full authorization (only owners can modify posts)
+
+---
+
+## 📸 API Testing Screenshots
+
+All test screenshots are stored inside:
+
 
 ### **OTP and Authentication**
 ![Mailtrap OTP](./Portfolio%20Samples/Mailtrap%20OTP%20code.png)
