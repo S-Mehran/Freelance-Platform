@@ -1,69 +1,41 @@
-# Freelancer Platform Backend (Node.js + TypeScript)
 
-This repository contains the backend codebase for a Freelancer Marketplace Platform.  
-It includes user authentication with OTP, role-based access control, job post management for clients, and initial modules for freelancers and admin.
+### **OTP and Authentication**
+![Mailtrap OTP](./Portfolio%20Samples/Mailtrap%20OTP%20code.png)
 
----
+![Confirm OTP](./Portfolio%20Samples/Postman%20Confirm%20OTP.png)
 
-## 🚀 Features
+![Create User](./Portfolio%20Samples/Postman%20Create%20User.png)
 
-### **Authentication & Security**
-- Email OTP verification using Mailtrap
-- JWT-based authentication
-- Bcrypt password hashing
-- Request validation using DTOs
-- Role-based authorization (Admin, Client, Freelancer)
+![Create User 2](./Portfolio%20Samples/Postman%20Create%20User%20.png)
 
-### **Client Features**
-- Create job posts  
-- Update job posts  
-- Delete job posts  
-- Retrieve **My Posts**  
-- Authorization ensures only owners can modify/delete posts
-
-### **Freelancer Features**
-- View available job posts  
-- (Future) Submit proposals
-
-### **Admin Features**
-- Basic user management  
-- (Future) Approvals & reporting system  
+![Login User](./Portfolio%20Samples/Postman%20Login%20User.png)
 
 ---
-
-## 📸 API Testing Screenshots
-
-Store the screenshots in a `screenshots/` directory.  
-These are the tests performed using Postman:
-
-### **OTP & Authentication**
-- Mailtrap OTP code  
-- Postman Create User  
-- Postman Confirm OTP  
-- Postman Login User  
 
 ### **Job Post Operations**
-- Postman Create Post  
-- Postman Update Post  
-- Postman Delete Post  
-- Postman Delete Post (Unauthorized — Failed)  
+#### Create Post  
+![Create Post](./Portfolio%20Samples/Postman%20Create%20Post.png)
 
-### **Client Route**
-- Get My Posts (Client role)
+#### Update Post  
+![Update Post](./Portfolio%20Samples/Postman%20Update%20Post.png)
 
-### **General**
-- Postman Menu (All routes)
+#### Delete Post  
+![Delete Post](./Portfolio%20Samples/Postman%20Delete%20Post.png)
 
-> Add images using this format once in the repo:  
-> `![Create User](./Portfolio Samples/Postman_Create_User.png)`  
+#### Unauthorized Delete (Client not owner)  
+![Unauthorized Delete](./Portfolio%20Samples/Postman%20Delete%20Post%20failed%20from%20Unauthorized%20client.png)
 
 ---
 
-## 🧱 Project Folder Structure
+### **General API Menu**
+![Postman Menu](./Portfolio%20Samples/Postman%20Menu.png)
+
+---
+
+## 📂 Folder Structure
 
 ```plaintext
 src
-│
 ├── controllers
 │   ├── auth.controller.ts
 │   ├── job-post.controller.ts
@@ -133,86 +105,9 @@ src
 │   ├── freelancer.service.ts
 │   ├── job-post.service.ts
 │   ├── mail.service.ts
+│   ├── proposal.service.ts
 │   ├── protected.service.ts
 │   └── user.service.ts
 │
 ├── data-source.ts
 └── index.ts
-🛠 Tech Stack
-Node.js
-
-Express.js
-
-TypeScript
-
-PostgreSQL
-
-TypeORM
-
-Supabase (Optional)
-
-Nodemailer (Mailtrap)
-
-JWT & Bcrypt
-
-Postman for testing
-
-📌 API Endpoints Overview
-Authentication
-Method	Endpoint	Description
-POST	/auth/register	Register a new user
-POST	/auth/send-otp	Send OTP to email
-POST	/auth/confirm-otp	Confirm OTP
-POST	/auth/login	Login user
-POST	/auth/reset-password	Reset password
-
-Client Job Post Routes
-Method	Endpoint	Description
-POST	/client/job-post	Create a job post
-PATCH	/client/job-post/:id	Update own post
-DELETE	/client/job-post/:id	Delete own post
-GET	/client/my-posts	Retrieve My Posts
-
-Freelancer Routes
-Method	Endpoint	Description
-GET	/freelancer/job-posts	Browse job posts
-
-⚙️ How to Run the Project
-1. Clone the repository
-bash
-Copy code
-git clone <repo-url>
-cd freelancer-backend
-2. Install dependencies
-bash
-Copy code
-npm install
-3. Configure environment variables
-Create .env:
-
-ini
-Copy code
-DATABASE_URL=postgres://...
-JWT_SECRET=...
-MAILTRAP_USER=...
-MAILTRAP_PASS=...
-4. Run migrations
-bash
-Copy code
-npm run typeorm migration:run
-5. Start development server
-bash
-Copy code
-npm run dev
-🧩 Future Enhancements
-Proposal submission system (freelancers → client)
-
-Notifications system (real-time)
-
-Admin dashboard
-
-Payment integration
-
-👤 Author
-Mehran Shah
-Backend Developer (Node.js | TypeScript | PostgreSQL | Supabase)
