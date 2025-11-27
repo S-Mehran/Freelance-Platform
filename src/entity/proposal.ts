@@ -20,7 +20,7 @@ export class Proposal {
     @ManyToOne(()=>Post, (post:Post)=>post.proposals)
     post: Post
 
-    @ManyToOne(()=>Freelancer, (freelancer:Freelancer)=>freelancer.proposals, {eager:true})
+    @ManyToOne(()=>Freelancer, (freelancer:Freelancer)=>freelancer.proposals)
     freelancer: Freelancer
 
     @Column({type: "text", nullable:false})
