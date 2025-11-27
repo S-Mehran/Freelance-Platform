@@ -5,6 +5,7 @@ import express from "express"
 import {userRouter} from "../src/routes/user.routes"
 import { authRouter } from "./routes/auth.routes"
 import { protectedRouter } from "./routes/protected.routes"
+import proposalRouter from "./routes/proposal.routes"
 import postRouter from "./routes/job-post.route"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
@@ -29,6 +30,7 @@ app.use("/api", authRouter);
 app.use("/api", userRouter);
 app.use("/api", protectedRouter)
 app.use("/api", postRouter)
+app.use("/api", proposalRouter)
 
 AppDataSource.initialize().then(async () => {
     app.listen(PORT, () => {

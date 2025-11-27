@@ -1,4 +1,3 @@
-import { PostController } from "../controllers/job-post.controller";
 import * as express from "express"
 import { authentication } from "../middleware/authentication";
 import { userRoles } from "../enum/user-roles.enum";
@@ -7,38 +6,38 @@ import { proposalAuthorization } from "../middleware/proposal-authorization/prop
 import { updatePostValidator } from "../middleware/validators/update-post.validator";
 import { userSpecificProposalAuthorization } from "../middleware/proposal-authorization/authorize-post-ownership-authorization";
 import { getFreelancerProposalAuthorization } from "../middleware/proposal-authorization/get-freelancer-proposal-authorization";
+import { ProposalController } from "../controllers/proposal.controller";
 
-const postRouter = express.Router()
+const proposalRouter = express.Router()
 
 // 
-postRouter.post('/create-proposal', 
-    postValidator, 
+proposalRouter.post('/create-proposal', 
     authentication, 
     proposalAuthorization(userRoles.FREELANCER), 
-    PostController.createPost)
+    ProposalController.createProposal)
 
-postRouter.put('/update-proposal/:id', 
-    updatePostValidator, 
+proposalRouter.put('/update-proposal/:id', 
     authentication, 
     userSpecificProposalAuthorization(userRoles.FREELANCER), 
-    PostController.updatePost)
+    ProposalController.updateProposal)
 
-postRouter.delete('/delete-proposal/:id', 
+proposalRouter.delete('/delete-proposal/:id', 
     authentication, 
     userSpecificProposalAuthorization(userRoles.FREELANCER), 
-    PostController.deletePost)
+    ProposalController.deleteProposal)
 
-postRouter.get('/proposal/:id', /*authentication, postAuthorization(userRoles.CLIENT),*/ PostController.findPostById)
-postRouter.get('/get-proposals',/* authentication, postAuthorization(userRoles.CLIENT),*/ PostController.getAllPosts)
+proposalRouter.get('/proposal/:id', /*authentication, postAuthorization(userRoles.CLIENT),*/ ProposalController.findProposalById)
 
-postRouter.get('/get-my-proposals', 
+proposalRouter.get('/get-proposals',/* authentication, postAuthorization(userRoles.CLIENT),*/ ProposalController.getAllProposals)
+
+proposalRouter.get('/get-my-proposals', 
     authentication, 
     getFreelancerProposalAuthorization(userRoles.FREELANCER), 
-    PostController.getClientPosts)
+    ProposalController.getFreelancerProposals)
 
-postRouter.get('/my-proposal/:id', 
+proposalRouter.get('/my-proposal/:id', 
     authentication, 
     userSpecificProposalAuthorization(userRoles.FREELANCER), 
-    PostController.findPostById)
+    ProposalController.findProposalById)
 
-export default postRouter
+export default proposalRouter

@@ -17,7 +17,7 @@ export const proposalAuthorization = (role: string) => {
         
         const userData = await userRepository.findById(user.id)
         console.log("User Data", userData)
-        if (userData && userData.role !== role) {
+        if (!userData || userData.role !== role) {
             return res.status(403).json({message: `Sign up as ${userRoles.FREELANCER} to send a proposal`})
         }
             console.log("Does it stop here", userData.freelancer)

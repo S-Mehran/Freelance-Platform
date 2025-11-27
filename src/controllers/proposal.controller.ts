@@ -49,8 +49,21 @@ export class ProposalController{
             if (!freelancer) {
                 return res.status(404).json({message: "Freelancer not found"})
             }
+
+            const postId = req.body.postId
+
+            if (!postId) {
+                return res.status(404).json({message: "Post ID not found in the Request"})
+            }
+            const post = await postRepository.findById(postId)
+
+            if (!post) {
+                return res.status(404).json({message: "Post not found"})
+            }
+
+
             console.log('Entered 1')
-            const sendProposal = await proposalRepository.createProposal({...req.body, freelancer})
+            const sendProposal = await proposalRepository.createProposal({...req.body, freelancer, post})
             console.log('Entered 2')
             return res.status(201).json({message: `Proposal has been uploaded:\n ${sendProposal.coverLetter}`})
         }
