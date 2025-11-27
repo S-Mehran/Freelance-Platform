@@ -44,7 +44,7 @@ export class ProposalController{
     static async createProposal(req: Request, res: Response) {
         try{
             console.log("Proposal Recieved")
-            const freelancerId = req.body.freelancer.id
+            const freelancerId = req.body.freelancerId
             const freelancer = await freelancerRepository.findById(freelancerId)
             if (!freelancer) {
                 return res.status(404).json({message: "Freelancer not found"})
