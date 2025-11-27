@@ -66,9 +66,9 @@ export class PostService{
             relations: ["client"],
         })
         
-        if (!clientPosts) {
-            return null
-        }
+        // if (!clientPosts) {
+        //     return null
+        // }
         return clientPosts
     }
 }

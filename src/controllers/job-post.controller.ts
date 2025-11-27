@@ -29,9 +29,10 @@ export class PostController{
         const posts = await postRepository.getPosts(skip, toTake)
 
 
-        if (!posts) {
-            return res.status(500).json({message: "Unable to fetch post"})
-        }
+        // if (posts.length===0) {
+        //     return res.status(500).json({message: "Unable to fetch post"})
+        // }
+        
         return res.status(200).json({posts, totalPages: pageCount})
 
 
@@ -97,9 +98,9 @@ export class PostController{
     const clientPosts = await postRepository.findPostsByClientId(clientId)
 
 
-    if (!clientPosts) {
-        return res.status(404).json({message: "No Posts found"})
-    }
+    // if (clientPosts.length===0) {
+    //     return res.status(404).json({message: "No Posts found"})
+    // }
 
     return res.status(200).json({clientPosts})
   }

@@ -1,8 +1,6 @@
-import { Post } from "../entity/job-post";
 import { Repository } from "typeorm";
-import { proposalRepository } from "../repository";
-import { Client } from "../entity/client";
 import { Proposal } from "../entity/proposal";
+import { Freelancer } from "../entity/freelancer";
 
 export class ProposalService{
     constructor(private proposalRepository: Repository<Proposal>) {}
@@ -27,7 +25,7 @@ export class ProposalService{
         return proposalCount
     }
 
-    async createPost(proposal: Proposal): Promise<Proposal> {
+    async createProposal(proposal: Proposal): Promise<Proposal> {
         try {
         console.log('service1')
         const newProposal = this.proposalRepository.create(proposal)
@@ -42,34 +40,43 @@ export class ProposalService{
         }
    }
 
-    async deletePost(id: number): Promise<boolean> {
+    async deleteProposal(id: number): Promise<boolean> {
         //const post = await this.postRepository.findOneBy({id})
         //if (!post) return false
         const result = await this.proposalRepository.delete(id)
         return result.affected!==0
     }
 
-    async updatePost(id: number, post: Partial<Post>): Promise<Proposal|null> {
+    async updateProposal(id: number, proposal: Partial<Proposal>): Promise<Proposal|null> {
         const getProposal = await this.proposalRepository.findOneBy({id})
         if (!getProposal) return null
 
-        const updatedProposal = this.proposalRepository.merge(getProposal, post)
+        const updatedProposal = this.proposalRepository.merge(getProposal, proposal)
         await this.proposalRepository.save(updatedProposal)
         return updatedProposal
     }
 
 
-    // async findProposalsByPostId(clientId: number): Promise<Proposal[]|null> {
-    //     const clientPosts = await this.proposalRepository.find({
-    //         where: {
-    //             client: {id: clientId},
-    //         },
-    //         relations: ["client"],
-    //     })
-        
-    //     if (!clientPosts) {
-    //         return null
-    //     }
-    //     return clientPosts
-    // }
+    async findProposalsByPostId(postId: number): Promise<Proposal[]> {
+        const postProposals = await this.proposalRepository.find({
+            where: {
+                post: {id: postId},
+            },
+            relations: ["post"],
+        })
+        return postProposals
+    }
+
+    async findProposalsByFreelancerId(freelancerId: number): Promise<Proposal[]> {
+        const postProposals = await this.proposalRepository.find({
+            where: {
+                freelancer: {id: freelancerId},
+            },
+            relations: ["post"],
+        })
+        return postProposals
+    }
+
+
+    
 }
