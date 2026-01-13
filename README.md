@@ -246,6 +246,6 @@ npm run dev
 
 # 👨‍💻 Author
 
-**Mehran Shah**\
-Backend Developer --- Node.js \| TypeScript \| SQL \| Supabase
+**Syed Muhammad Mehran**\
+Full Stack Developer --- Node.js \| TypeScript \| SQL \| Supabase
 
