@@ -28,12 +28,9 @@ export class ProposalService{
 
     async createProposal(proposal: Proposal): Promise<Proposal> {
         try {
-        console.log('service1')
         const newProposal = this.proposalRepository.create(proposal)
-        console.log('service2')
         
             await this.proposalRepository.save(newProposal);
-            console.log("service3");
             return newProposal;
         } catch (error) {
             console.error("Error in save():", error);

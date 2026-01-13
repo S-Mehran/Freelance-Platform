@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
   OneToOne,
+  DeleteDateColumn,
 } from "typeorm";
 
 import { Freelancer } from "./freelancer";
@@ -34,7 +35,6 @@ export class Contract {
     @Column({type: "enum", enum: contractStatus, default: contractStatus.PENDING})
     status: contractStatus
 
-
     @Column({ type: "decimal", precision: 10, scale: 2, transformer: { 
     to: (value: number) => value, 
     from: (value: string) => parseFloat(value) 
@@ -53,5 +53,6 @@ export class Contract {
     @UpdateDateColumn()
     updatedAt: Date;
 
-
+    @DeleteDateColumn()
+    deletedAt?: Date;
 }
