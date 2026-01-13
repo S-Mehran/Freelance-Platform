@@ -6,6 +6,7 @@ export class PostController{
 
     static async findPostById(req: Request, res: Response) {
         try{
+            console.log("Finding Post")
             const postId = Number(req.params.id)
             const post = await postRepository.findById(postId)
             if (!post) return res.status(404).json({message: "Post not found"})
@@ -24,15 +25,15 @@ export class PostController{
         let page = parseInt(req.query.pg as string)
         if (page < 1) page = 1;
         if (page > Math.ceil(pageCount)) page = Math.ceil(pageCount);
-        const skip = (page - 1) * toTake;
-        
+        let skip = (page - 1) * toTake;
+        skip = Number(skip)
         const posts = await postRepository.getPosts(skip, toTake)
 
 
         // if (posts.length===0) {
         //     return res.status(500).json({message: "Unable to fetch post"})
         // }
-        
+
         return res.status(200).json({posts, totalPages: pageCount})
 
 

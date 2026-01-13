@@ -79,6 +79,7 @@ export class UserService {
     if (!user) return false
 
     if (user.otpCode!==otp) {
+      console.log("Otp code did not match", user.otpCode, otp)
       return false
     }
     const currTime = new Date(Date.now())

@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import User  from "./User";
 import {Post} from "./job-post";
+import { Contract } from "./contract";
 
 @Entity({ name: "clients" })
 export class Client {
@@ -28,6 +29,9 @@ export class Client {
 
   @OneToMany(() => Post, (post: Post) => post.client)
   posts: Post[];
+
+  @OneToMany(() => Contract, (contract: Contract) => contract.client)
+  contracts: Contract[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import { Proposal } from "../entity/proposal";
 import { Freelancer } from "../entity/freelancer";
+import { Post } from "../entity/job-post";
 
 export class ProposalService{
     constructor(private proposalRepository: Repository<Proposal>) {}
@@ -62,7 +63,7 @@ export class ProposalService{
             where: {
                 post: {id: postId},
             },
-            relations: ["post"],
+            relations: ["freelancer"],
         })
         return postProposals
     }
@@ -77,6 +78,15 @@ export class ProposalService{
         return postProposals
     }
 
+    async hasFreelancerPosted(freelancerId: number, postId: number): Promise<boolean> {
+        const postFreelancerProposal = await this.proposalRepository.find({
+            where: {
+                freelancer: {id:freelancerId},
+                post: {id: postId}
+            },
+            relations: ["freelancer", "post"]
+        }) 
 
-    
+        return postFreelancerProposal.length!=0
+    }
 }

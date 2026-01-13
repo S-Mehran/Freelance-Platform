@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import  User  from "./User";
 import { Proposal } from "./proposal";
+import { Contract } from "./contract";
 
 
 @Entity({ name: "freelancers" })
@@ -37,6 +38,8 @@ export class Freelancer {
   @OneToMany(() => Proposal, (proposal: Proposal) => proposal.post)
   proposals: Proposal[];
 
+  @OneToOne(() => Contract, (contract: Contract) => contract.freelancer)
+  contract: Contract;
 
   @CreateDateColumn()
   createdAt: Date;

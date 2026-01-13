@@ -5,12 +5,14 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToOne,
 } from "typeorm";
 
 import { Freelancer } from "./freelancer";
 import { Post } from "./job-post";
 import { bidType } from "../enum/bid-type.enum";
 import { proposalStatus } from "../enum/proposal-status.enum";
+import { Contract } from "./contract";
 //Fields to add later => Connects Used
 @Entity({ name: "proposals" })
 export class Proposal {
@@ -22,6 +24,9 @@ export class Proposal {
 
     @ManyToOne(()=>Freelancer, (freelancer:Freelancer)=>freelancer.proposals)
     freelancer: Freelancer
+
+    @OneToOne(() => Contract, (contract: Contract) => contract.proposal)
+    contract: Contract;
 
     @Column({type: "text", nullable:false})
     coverLetter: string

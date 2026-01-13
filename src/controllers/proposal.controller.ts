@@ -61,6 +61,11 @@ export class ProposalController{
                 return res.status(404).json({message: "Post not found"})
             }
 
+            let hasFreelancerPosted = await proposalRepository.hasFreelancerPosted(freelancerId, postId)
+            console.log(hasFreelancerPosted)
+            if (hasFreelancerPosted) {
+                return res.status(400).json({message: "You have already send your proposal."})
+            }
 
             console.log('Entered 1')
             const sendProposal = await proposalRepository.createProposal({...req.body, freelancer, post})

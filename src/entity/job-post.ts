@@ -12,6 +12,7 @@ import {Client} from './client'
 import { Proposal } from "./proposal";
 import { levelOfExpertise } from "../enum/level-of-expertise.enum";
 import { projectType } from "../enum/project-type.enum";
+import { Contract } from "./contract";
 
 @Entity({ name: "posts" })
 export class Post {
@@ -41,6 +42,9 @@ export class Post {
 
   @OneToMany(() => Proposal, (proposal: Proposal) => proposal.post)
   proposals: Proposal[];
+
+  @OneToMany(() => Contract, (contract: Contract) => contract.post)
+  contracts: Contract[];
 
   @CreateDateColumn()
   createdAt: Date;
