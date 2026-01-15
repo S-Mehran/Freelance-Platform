@@ -9,6 +9,8 @@ import { FreelancerService } from "../service/freelancer.service";
 import { Freelancer } from "../entity/freelancer";
 import { ProposalService } from "../service/proposal.service";
 import { Proposal } from "../entity/proposal";
+import { contractService } from "../service/contract.service";
+import { Contract } from "../entity/contract";
 
 export const userRepository = new UserService(
   AppDataSource.getRepository(User)
@@ -28,6 +30,10 @@ export const postRepository = new PostService(
 
 export const proposalRepository = new ProposalService(
   AppDataSource.getRepository(Proposal)
+)
+
+export const contractRepository = new contractService(
+  AppDataSource.getRepository(Contract)
 )
 // const dataSource = AppDataSource.getRepository(User)
 
