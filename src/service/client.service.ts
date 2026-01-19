@@ -42,4 +42,18 @@ export class ClientService {
     const result = await this.clientRepository.delete({ id });
     return result.affected !== 0;
   }
+
+  async profileUpdateAfterOrderCompletion(clientId: number, amountSpent: number): Promise<Client> {
+    let client = await this.findById(clientId)
+    if (!client) {
+      return null
+    }
+    client.numberOfHires += 1
+    client.amountSpent += amountSpent
+
+    await this.clientRepository.save(client)
+
+    return client
+  }
+
 }

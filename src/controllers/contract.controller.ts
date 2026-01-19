@@ -138,12 +138,26 @@ import { contractStatus } from "../enum/contract-status.enum"
                 return res.status(200).json(contract)
             }
             else if (status===contractStatus.CANCELLED) {
-                const contract = await contractRepository.RejectContract(contractId, status)
+                const contract = await contractRepository.rejectContract(contractId, status)
                 if (!contract) {
                     return res.status(400).json({message: "Invalid contract transition"})
                 }
                 return res.status(200).json(contract)
             }
 
+        }
+    )
+
+
+    export const getContractInformation = catchAsync(
+        async(req: Request, res: Response) => {
+            const contractId = Number(req.params.id)
+            const contract = await contractRepository.getContractInformation(contractId)
+
+            if (!contract) {
+                return res.status(400).json({message: "Unable to retrieve contract"})
+            }
+
+            return res.status(200).json(contract)
         }
     )

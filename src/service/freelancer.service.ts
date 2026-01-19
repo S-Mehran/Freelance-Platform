@@ -41,4 +41,18 @@ export class FreelancerService {
     const result = await this.freelancerRepository.delete({ id });
     return result.affected !== 0;
   }
+
+  async profileUpdateAfterOrderCompletion(freelancerId: number, agreedProjectPrice: number): Promise<Freelancer> {
+    let freelancer = await this.findById(freelancerId)
+    if (!freelancer) {
+      return null
+    }
+    freelancer.numberOfJobs += 1
+    //uncomment this line after creating earning column in freelancer entity
+    //freelancer.totalEarnings += agreedPrice
+
+    await this.freelancerRepository.save(freelancer)
+
+    return freelancer
+  }
 }

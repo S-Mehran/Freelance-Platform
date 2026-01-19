@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import { Proposal } from "../entity/proposal";
 import { Freelancer } from "../entity/freelancer";
 import { Post } from "../entity/job-post";
+import { proposalStatus } from "../enum/proposal-status.enum";
 
 export class ProposalService{
     constructor(private proposalRepository: Repository<Proposal>) {}
@@ -86,4 +87,30 @@ export class ProposalService{
 
         return postFreelancerProposal.length!=0
     }
+
+
+    async markAsAccepted(proposalId: number): Promise<Proposal | null> {
+        let proposal = await this.proposalRepository.findOne({
+            where: {id: proposalId},
+        })
+        if (!proposal) {
+            return null
+        }
+        proposal.status = proposalStatus.ACCEPTED
+        await this.proposalRepository.save(proposal)
+        return proposal
+    }
+
+    async markProposalsAsRejected(postId: number, acceptedProposalId: number): Promise<void> {
+        let postProposals = await this.findProposalsByPostId(postId)
+        if (postProposals.length===0) {
+            return
+        }
+        postProposals.map((proposal)=> {
+            if (proposal.id!==acceptedProposalId) {
+                proposal.status = proposalStatus.REJECTED
+            }
+        })
+    }
+
 }

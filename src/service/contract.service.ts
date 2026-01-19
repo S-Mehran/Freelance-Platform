@@ -1,11 +1,10 @@
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { Contract } from "../entity/contract";
 import { contractStatus } from "../enum/contract-status.enum";
 import { PostService } from "./job-post.service";
 import { FreelancerService } from "./freelancer.service";
 import { ClientService } from "./client.service";
 import { ProposalService } from "./proposal.service";
-import { Freelancer } from "../entity/freelancer";
 
 
 export class contractService {
@@ -13,11 +12,9 @@ export class contractService {
     private freelancerService: FreelancerService,
     private clientService: ClientService,
     private proposalService: ProposalService,
-    private postService: PostService
+    private postService: PostService,
+    private dataSource: DataSource,
   ) {}
-
-
-
 
   async findAll(): Promise<Contract[]> {
     return this.contractRepository.find();
@@ -31,7 +28,6 @@ export class contractService {
 
 
   async createContract(contract: Contract): Promise<Contract> {
-
     const {freelancerId, clientId, proposalId, postId} = contract
     if (!postId || !clientId || !freelancerId || !proposalId) {
       return null
@@ -119,8 +115,6 @@ export class contractService {
 
   }
 
-
-
   //Contract shown to freelancer
   async getContractsByFreelancerIdAndStatus(freelancerId: number, status: contractStatus): Promise<Contract[]> {
     const contracts = await this.contractRepository.find({
@@ -137,7 +131,8 @@ export class contractService {
 
 
   async acceptContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
-    const contract = await this.contractRepository.findOne({
+    return await this.dataSource.transaction(async (transactionalEntityManager)=> {
+      const contract = await this.contractRepository.findOne({
       where: {id: contractId}
     })
 
@@ -148,8 +143,11 @@ export class contractService {
     }
     contract.status = updatedStatus
     
-    this.contractRepository.save(contract)
+    await transactionalEntityManager.save(Contract, contract)
+
+    await this.proposalService.markAsAccepted(contract.proposalId)
     return contract
+    })
   }
 
   async rejectContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
@@ -159,9 +157,6 @@ export class contractService {
 
     if (!contract) return null
 
-    if (contract.status === contractStatus.ACTIVE) {
-      console.log()
-    }
     if (![contractStatus.ACTIVE, contractStatus.PENDING].includes(contract.status)) {
       console.log("Contract cannot be cancelled")
       return null
@@ -174,7 +169,8 @@ export class contractService {
   }
 
   async completeContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
-    const contract = await this.contractRepository.findOne({
+    return await this.dataSource.transaction(async (transactionalEntityManager)=> {
+      const contract = await this.contractRepository.findOne({
       where: {id: contractId}
     })
 
@@ -187,8 +183,25 @@ export class contractService {
 
 
     contract.status = updatedStatus
-    this.contractRepository.save(contract)
+    await transactionalEntityManager.save(Contract, contract)
+
+    await this.freelancerService.profileUpdateAfterOrderCompletion(contract.freelancerId, contract.agreedPrice)
+    await this.clientService.profileUpdateAfterOrderCompletion(contract.clientId, contract.agreedPrice)
     return contract 
+    })
+  }
+
+  //following function will be used to display information about all the parties involved in the contract
+  //e.g. contract will display essenetial info of freelancer and client and post title
+  async getContractInformation(contractId: number): Promise<Contract | null> {
+    const contract = this.contractRepository.findOne({
+      where: {
+        id: contractId
+      },
+      relations: ['client', 'freelancer', 'post']
+    })
+
+    return contract
   }
 
 
