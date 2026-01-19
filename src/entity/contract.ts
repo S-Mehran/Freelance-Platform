@@ -4,11 +4,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  OneToMany,
   OneToOne,
   DeleteDateColumn,
+  ManyToOne,
+  JoinColumn
 } from "typeorm";
-
 import { Freelancer } from "./freelancer";
 import { Post } from "./job-post";
 import { contractStatus } from "../enum/contract-status.enum";
@@ -20,16 +20,40 @@ export class Contract {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToMany(()=>Post, (post:Post)=>post.contracts)
+    @Column({name: "post_id"})
+    postId: number
+    
+    @ManyToOne(()=>Post, (post:Post)=>post.contracts, {
+      onDelete: "CASCADE"
+    })
+    @JoinColumn({name: "post_id"})
     post: Post
 
-    @OneToOne(()=>Freelancer, (freelancer:Freelancer)=>freelancer.contract)
+    @Column({name: "freelancer_id"})
+    freelancerId: number
+
+    @ManyToOne(()=>Freelancer, (freelancer:Freelancer)=>freelancer.contracts, {
+      onDelete: "RESTRICT"
+    })
+    @JoinColumn({name: "freelancer_id"})
     freelancer: Freelancer
 
-    @OneToMany(()=>Client, (client: Client)=>client.contracts)
+    @Column({name: "client_id"})
+    clientId: number
+
+    @ManyToOne(()=>Client, (client: Client)=>client.contracts, {
+      onDelete: "RESTRICT"
+    })
+    @JoinColumn({name: "client_id"})
     client: Client
 
-    @OneToOne(()=>Proposal, (proposal: Proposal)=>proposal.contract)
+    @Column({name: "proposal_id"})
+    proposalId: number
+    
+    @OneToOne(()=>Proposal, (proposal: Proposal)=>proposal.contract, {
+      onDelete: "SET NULL"
+    })
+    @JoinColumn({name: "proposal_id"})
     proposal: Proposal
 
     @Column({type: "enum", enum: contractStatus, default: contractStatus.PENDING})

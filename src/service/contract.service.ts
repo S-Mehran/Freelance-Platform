@@ -5,6 +5,7 @@ import { PostService } from "./job-post.service";
 import { FreelancerService } from "./freelancer.service";
 import { ClientService } from "./client.service";
 import { ProposalService } from "./proposal.service";
+import { Freelancer } from "../entity/freelancer";
 
 
 export class contractService {
@@ -14,6 +15,9 @@ export class contractService {
     private proposalService: ProposalService,
     private postService: PostService
   ) {}
+
+
+
 
   async findAll(): Promise<Contract[]> {
     return this.contractRepository.find();
@@ -27,10 +31,6 @@ export class contractService {
 
 
   async createContract(contract: Contract): Promise<Contract> {
-    // const freelancerId = contract.freelancer.id
-    // const clientId = contract.client.id
-    // const postId = contract.post.id
-    // const proposalId = contract.proposal.id
 
     const {freelancerId, clientId, proposalId, postId} = contract
     if (!postId || !clientId || !freelancerId || !proposalId) {
@@ -74,7 +74,7 @@ export class contractService {
   async getAllContractsByClientId(clientId: number): Promise<Contract[]> {
     const contracts = await this.contractRepository.find({
         where: {
-            client: {id: clientId},
+            clientId: clientId,
         },
         relations: ['client']
     })
@@ -82,42 +82,25 @@ export class contractService {
     return contracts
   }
 
-
-  async getActiveContracts(): Promise<Contract[]> {
+  async getContractsByFreelancerId(freelancerId: number): Promise<Contract[]> {
     const contracts = await this.contractRepository.find({
-        where: {
-            status: contractStatus.ACTIVE,
-        }
+      where: {
+        freelancerId: freelancerId,
+      },
+      relations: ['freelancer']
     })
-
     return contracts
+
   }
 
-  async getPendingContracts(): Promise<Contract[]> {
+
+
+  //global instead of using seperate for separate status
+  async getContractsByStatus(status: contractStatus): Promise<Contract[]> {
     const contracts = await this.contractRepository.find({
-        where: {
-            status: contractStatus.PENDING,
-        }
-    })
-
-    return contracts
-  }
-
-    async getCompletedContracts(): Promise<Contract[]> {
-    const contracts = await this.contractRepository.find({
-        where: {
-            status: contractStatus.COMPLETED,
-        }
-    })
-
-    return contracts
-  }
-
-    async getCancelledContracts(): Promise<Contract[]> {
-    const contracts = await this.contractRepository.find({
-        where: {
-            status: contractStatus.CANCELLED,
-        }
+      where: {
+        status: status,
+      }
     })
 
     return contracts
@@ -127,7 +110,7 @@ export class contractService {
   async getContractsByClientIdAndStatus(clientId: number, status: contractStatus): Promise<Contract[]> {
     const contracts = await this.contractRepository.find({
       where: {
-        client: {id: clientId},
+        clientId: clientId,
         status: status
       },
       relations: ['client']
@@ -137,11 +120,12 @@ export class contractService {
   }
 
 
+
   //Contract shown to freelancer
   async getContractsByFreelancerIdAndStatus(freelancerId: number, status: contractStatus): Promise<Contract[]> {
     const contracts = await this.contractRepository.find({
       where: {
-        freelancer: {id: freelancerId},
+        freelancerId: freelancerId,
         status: status
       },
       relations: ['freelancer']
@@ -168,7 +152,7 @@ export class contractService {
     return contract
   }
 
-  async RejectContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
+  async rejectContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
     const contract = await this.contractRepository.findOne({
       where: {id: contractId}
     })
@@ -206,5 +190,6 @@ export class contractService {
     this.contractRepository.save(contract)
     return contract 
   }
+
 
 }

@@ -38,8 +38,8 @@ export class Freelancer {
   @OneToMany(() => Proposal, (proposal: Proposal) => proposal.post)
   proposals: Proposal[];
 
-  @OneToOne(() => Contract, (contract: Contract) => contract.freelancer)
-  contract: Contract;
+  @OneToMany(() => Contract, (contract: Contract) => contract.freelancer)
+  contracts: Contract[];
 
   @CreateDateColumn()
   createdAt: Date;
