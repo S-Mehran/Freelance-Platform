@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { Proposal } from "../entity/proposal";
 import { Freelancer } from "../entity/freelancer";
 import { Post } from "../entity/job-post";
@@ -89,8 +89,9 @@ export class ProposalService{
     }
 
 
-    async markAsAccepted(proposalId: number): Promise<Proposal | null> {
-        let proposal = await this.proposalRepository.findOne({
+    async markAsAccepted(proposalId: number, manager?: EntityManager): Promise<Proposal | null> {
+        const repo = manager ? manager.getRepository(Proposal): this.proposalRepository
+        let proposal = await repo.findOne({
             where: {id: proposalId},
         })
         if (!proposal) {
@@ -111,6 +112,26 @@ export class ProposalService{
                 proposal.status = proposalStatus.REJECTED
             }
         })
+
+        await this.proposalRepository.save(postProposals)
+    }
+
+    async updateProposalStatusAfterOrderCompletion(postId: number, manager?: EntityManager): Promise<void> {
+        const repo = manager ? manager.getRepository(Proposal): this.proposalRepository
+        // let postProposals = await this.findProposalsByPostId(postId)
+        // if (postProposals.length===0) {
+        //     return
+        // }
+
+        let postProposals = await repo.find({
+            where: {
+                post: {id: postId}
+            }
+        })
+        postProposals.forEach((proposal)=> {
+            proposal.status=proposalStatus.ARCHIVED
+        })
+        await repo.save(postProposals)
     }
 
 }

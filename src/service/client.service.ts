@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { Post } from "../entity/job-post";
 import User from "../entity/User";
 import { Client } from "../entity/client";
@@ -43,15 +43,21 @@ export class ClientService {
     return result.affected !== 0;
   }
 
-  async profileUpdateAfterOrderCompletion(clientId: number, amountSpent: number): Promise<Client> {
-    let client = await this.findById(clientId)
+  async profileUpdateAfterOrderCompletion(clientId: number, amountSpent: number, manager?: EntityManager): Promise<Client> {
+     const repo = manager ? manager.getRepository(Client): this.clientRepository
+    let client = await repo.findOne({
+      where: {id:clientId},
+    })
     if (!client) {
       return null
     }
-    client.numberOfHires += 1
-    client.amountSpent += amountSpent
+    // client.numberOfHires += 1
+    // client.amountSpent += amountSpent
+    await repo.update(clientId, {
+      numberOfHires: () => `"numberOfHires" + 1`,
+      amountSpent: () => `"amountSpent" + ${amountSpent}`
+    })
 
-    await this.clientRepository.save(client)
 
     return client
   }

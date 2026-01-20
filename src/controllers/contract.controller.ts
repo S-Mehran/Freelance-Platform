@@ -28,7 +28,8 @@ import { contractStatus } from "../enum/contract-status.enum"
     export const updateContract = catchAsync(
         async(req: Request, res: Response) => {
             const contractId = Number(req.params.id)
-            const updatedContract = await contractRepository.updateContract(contractId, req.body)
+            const user = req.user
+            const updatedContract = await contractRepository.updateContract(contractId, req.body, user)
             if (!updateContract) {
                 return res.status(400).json({message: "Contract could not be updated"})
             }

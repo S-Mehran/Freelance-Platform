@@ -5,6 +5,7 @@ import { PostService } from "./job-post.service";
 import { FreelancerService } from "./freelancer.service";
 import { ClientService } from "./client.service";
 import { ProposalService } from "./proposal.service";
+import { userRoles } from "../enum/user-roles.enum";
 
 
 export class contractService {
@@ -43,6 +44,16 @@ export class contractService {
     if (!freelancerExists || !clientExists || !postExists || !proposalExists) {
       return null
     }
+
+    if (contract.freelancerId!=proposalExists.freelancer.id) {
+      console.log("mismatch between contract and proposal freelancer Ids")
+      return null
+    } 
+
+    if (contract.clientId !== postExists.client.id) {
+      console.log("Mismatch between client Ids in contract and post")
+      return null
+    }
     
     const newContract = this.contractRepository.create(contract);
     await this.contractRepository.save(newContract)
@@ -52,10 +63,16 @@ export class contractService {
 
   async updateContract(
     id: number,
-    contractData: Partial<Contract>
+    contractData: Partial<Contract>,
+    user: any
   ): Promise<Contract | null> {
     const contract = await this.contractRepository.findOneBy({ id });
     if (!contract) return null;
+
+    if (user.role===userRoles.CLIENT && user.id!==contract.clientId) {
+      console.log("That ain't your contract what's you doing here?")
+      return null
+    }
 
     this.contractRepository.merge(contract, contractData);
     await this.contractRepository.save(contract);
@@ -129,10 +146,9 @@ export class contractService {
   }
 
 
-
   async acceptContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
     return await this.dataSource.transaction(async (transactionalEntityManager)=> {
-      const contract = await this.contractRepository.findOne({
+      const contract = await transactionalEntityManager.findOne(Contract, {
       where: {id: contractId}
     })
 
@@ -145,7 +161,7 @@ export class contractService {
     
     await transactionalEntityManager.save(Contract, contract)
 
-    await this.proposalService.markAsAccepted(contract.proposalId)
+    await this.proposalService.markAsAccepted(contract.proposalId, transactionalEntityManager)
     return contract
     })
   }
@@ -170,8 +186,9 @@ export class contractService {
 
   async completeContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
     return await this.dataSource.transaction(async (transactionalEntityManager)=> {
-      const contract = await this.contractRepository.findOne({
-      where: {id: contractId}
+      const contract = await transactionalEntityManager.findOne(Contract, {
+      where: {id: contractId},
+      lock: {mode: "pessimistic_write"}
     })
 
     if (!contract) return null
@@ -184,9 +201,10 @@ export class contractService {
 
     contract.status = updatedStatus
     await transactionalEntityManager.save(Contract, contract)
+    await this.freelancerService.profileUpdateAfterOrderCompletion(contract.freelancerId, contract.agreedPrice, transactionalEntityManager)
+    await this.clientService.profileUpdateAfterOrderCompletion(contract.clientId, contract.agreedPrice, transactionalEntityManager)
+    await this.proposalService.updateProposalStatusAfterOrderCompletion(contract.postId, transactionalEntityManager)
 
-    await this.freelancerService.profileUpdateAfterOrderCompletion(contract.freelancerId, contract.agreedPrice)
-    await this.clientService.profileUpdateAfterOrderCompletion(contract.clientId, contract.agreedPrice)
     return contract 
     })
   }
@@ -203,6 +221,5 @@ export class contractService {
 
     return contract
   }
-
-
 }
+
