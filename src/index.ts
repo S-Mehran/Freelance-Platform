@@ -9,6 +9,7 @@ import proposalRouter from "./routes/proposal.routes"
 import postRouter from "./routes/job-post.route"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
+import contractRouter from "./routes/contract.routes"
 
 const app = express();
 //app.use(cors())
@@ -31,6 +32,7 @@ app.use("/api", userRouter);
 app.use("/api", protectedRouter)
 app.use("/api", postRouter)
 app.use("/api", proposalRouter)
+app.use("/api", contractRouter)
 
 AppDataSource.initialize().then(async () => {
     app.listen(PORT, () => {

@@ -8,7 +8,7 @@ import { ProposalService } from "./proposal.service";
 import { userRoles } from "../enum/user-roles.enum";
 
 
-export class contractService {
+export class ContractService {
   constructor(private contractRepository: Repository<Contract>,
     private freelancerService: FreelancerService,
     private clientService: ClientService,

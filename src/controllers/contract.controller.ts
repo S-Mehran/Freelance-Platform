@@ -20,7 +20,7 @@ import { contractStatus } from "../enum/contract-status.enum"
 
             const contract = await contractRepository.createContract(req.body)
             if (!contract) return res.status(404).json({message: "Contract not found"})
-            return res.status(200).json({})
+            return res.status(200).json({contract})
 
         }
     )
