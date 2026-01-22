@@ -19,6 +19,7 @@ export const ContractAuthorization = (roles: string[]) => {
             return res.status(403).json({message: `You are not allowed to access this resource`})
         }
 
+
         if (userData.role===userRoles.FREELANCER) {
             req.user = {
                 id: userData.freelancer.id,
@@ -37,6 +38,10 @@ export const ContractAuthorization = (roles: string[]) => {
                 email: userData.email,
                 role: userData.role,
             }
+        }
+
+        if (req.user.id!==req.body.clientId) {
+            return res.status(403).json({message: "You are not allowed to access this resource"})
         }
         
     next()

@@ -111,7 +111,7 @@ import { contractStatus } from "../enum/contract-status.enum"
             const freelancerId = req.user.id
             const status = req.query.contractStatus as contractStatus
 
-            const contracts = await contractRepository.getContractsByClientIdAndStatus(freelancerId, status)
+            const contracts = await contractRepository.getContractsByFreelancerIdAndStatus(freelancerId, status)
             if (contracts.length===0) {
                 return res.status(200).json({message: "There are no contracts to display"})
             }

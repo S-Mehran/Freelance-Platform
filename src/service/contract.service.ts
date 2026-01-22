@@ -55,6 +55,29 @@ export class ContractService {
       return null
     }
     
+    // const clientContracts = await this.getAllContractsByClientId(clientId)
+    // clientContracts.forEach((contract)=> {
+    //   if (contract.freelancerId===freelancerId && contract.postId===postId && contract.proposalId===proposalId) {
+    //     console.log('The contract already exists')
+    //     return null
+    //   }
+    // })
+
+    // More efficient check
+    const exists = await this.contractRepository.exists({
+      where: {
+        clientId,
+        freelancerId,
+        postId,
+        proposalId
+      }
+    });
+
+    if (exists) {
+      console.log('Contract already exists')
+      return null
+    }
+
     const newContract = this.contractRepository.create(contract);
     await this.contractRepository.save(newContract)
     return newContract
