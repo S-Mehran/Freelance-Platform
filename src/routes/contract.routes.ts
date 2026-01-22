@@ -14,27 +14,32 @@ import { createContract,
  } from "../controllers/contract.controller";
 import { ContractAuthorization } from "../middleware/contract-authorization/contract-authorization";
 import { userSpecificContractAuthorization } from "../middleware/contract-authorization/contract-ownership-authorization";
-
+import { contractValidator } from "../middleware/validators/contract.dto";
+import { updateContractValidator } from "../middleware/validators/update-contract.dto";
 
 const contractRouter = express.Router()
 
 // Create Contract Routes - With auth and role-based authorization to prevent access errors
-contractRouter.post('/create-contract', authentication, ContractAuthorization([userRoles.CLIENT]), createContract)
-
-
+contractRouter.post('/create-contract', 
+    contractValidator,
+    authentication, 
+    ContractAuthorization([userRoles.CLIENT]), 
+    createContract)
 
 contractRouter.put('/update-contract/:id', 
+    updateContractValidator,
     authentication, 
     userSpecificContractAuthorization([userRoles.CLIENT]), 
     updateContract)
 
-contractRouter.delete('/delete-contract/:id', 
+contractRouter.delete('/delete-contract/:id',
     authentication, 
     userSpecificContractAuthorization([userRoles.CLIENT]), 
     deleteContract)
 
 //just for the reminder. some status changed can only be executed by freelancer and some by client. Add that in authorization layer. 
 contractRouter.put('/update-status/:id', 
+    updateContractValidator,
     authentication, 
     userSpecificContractAuthorization([userRoles.CLIENT, userRoles.FREELANCER]), 
     updateContractStatus)

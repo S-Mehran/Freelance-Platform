@@ -1,23 +1,25 @@
 import * as express from "express"
 import { authentication } from "../middleware/authentication";
 import { userRoles } from "../enum/user-roles.enum";
-import { postValidator } from "../middleware/job-post.validator";
 import { proposalAuthorization } from "../middleware/proposal-authorization/proposal-authorization";
-import { updatePostValidator } from "../middleware/validators/update-post.validator";
 import { userSpecificProposalAuthorization } from "../middleware/proposal-authorization/authorize-post-ownership-authorization";
 import { getFreelancerProposalAuthorization } from "../middleware/proposal-authorization/get-freelancer-proposal-authorization";
 import { ProposalController } from "../controllers/proposal.controller";
+import { proposalValidator } from "../middleware/validators/proposal.validator";
+import { updateProposalValidator } from "../middleware/validators/update-proposal.validator";
 
 const proposalRouter = express.Router()
 
 // Create Proposal Route - With auth and role-based authorization to prevent access errors
 proposalRouter.post('/create-proposal', 
+    proposalValidator,
     authentication, 
     proposalAuthorization(userRoles.FREELANCER), 
     ProposalController.createProposal)
 
 // Update Proposal Route - Includes ownership check to avoid unauthorized update errors
 proposalRouter.put('/update-proposal/:id', 
+    updateProposalValidator,
     authentication, 
     userSpecificProposalAuthorization(userRoles.FREELANCER), 
     ProposalController.updateProposal)
