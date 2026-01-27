@@ -10,7 +10,7 @@ export class ProposalService{
     async findById(id: number): Promise<Proposal | null> {
         return this.proposalRepository.findOne({ 
             where: {id},
-            relations: ['freelancer'],
+            relations: ['freelancer', 'freelancer.user', 'post', 'post.client'],
          });
       }
 
@@ -61,7 +61,7 @@ export class ProposalService{
             where: {
                 post: {id: postId},
             },
-            relations: ["freelancer"],
+            relations: ["freelancer", "freelancer.user", "post"],
         })
         return postProposals
     }

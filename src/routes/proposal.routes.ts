@@ -24,6 +24,13 @@ proposalRouter.put('/update-proposal/:id',
     userSpecificProposalAuthorization(userRoles.FREELANCER), 
     ProposalController.updateProposal)
 
+proposalRouter.put('/accept-proposal/:id',
+    updateProposalValidator,
+    authentication, 
+    userSpecificProposalAuthorization(userRoles.CLIENT),
+    ProposalController.updateProposal
+)
+
 // Delete Proposal Route - Secure deletion with auth to fix permission-related bugs
 proposalRouter.delete('/delete-proposal/:id', 
     authentication, 
@@ -50,5 +57,11 @@ proposalRouter.get('/get-post-proposals/:id',
     authentication,
     ProposalController.getPostProposals
 )
+
+proposalRouter.get('/get-freelancer-proposal/:id',
+    authentication,
+    ProposalController.findProposalById
+)
+
 
 export default proposalRouter

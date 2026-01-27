@@ -207,6 +207,41 @@ export class ContractService {
     return contract
   }
 
+  async cancelContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
+    const contract = await this.contractRepository.findOne({
+      where: {id: contractId}
+    })
+
+    if (!contract) return null
+
+    if (![contractStatus.ACTIVE, contractStatus.SUBMITTED].includes(contract.status)) {
+      console.log("Contract cannot be cancelled")
+      throw new Error("Invalid Contract Transition.")
+    }
+
+
+    contract.status = updatedStatus
+    this.contractRepository.save(contract)
+    return contract
+  }
+    async submitContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
+    const contract = await this.contractRepository.findOne({
+      where: {id: contractId}
+    })
+
+    if (!contract) return null
+
+    if (![contractStatus.ACTIVE].includes(contract.status)) {
+      throw new Error("Contract is not Active")
+    }
+
+
+    contract.status = updatedStatus
+    this.contractRepository.save(contract)
+    return contract
+  }
+
+
   async completeContract(contractId: number, updatedStatus: contractStatus): Promise<Contract | null> {
     return await this.dataSource.transaction(async (transactionalEntityManager)=> {
       const contract = await transactionalEntityManager.findOne(Contract, {
@@ -216,9 +251,9 @@ export class ContractService {
 
     if (!contract) return null
 
-    if (contract.status!==contractStatus.ACTIVE) {
+    if (contract.status!==contractStatus.SUBMITTED) {
       console.log("Inactive Status")
-      return null
+      throw new Error("Contract has not been submitted")
     }
 
 

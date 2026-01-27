@@ -10,7 +10,12 @@ import { createContract,
     getAllContractsByFreelancerId,
     getContractsByClientIdAndStatus,
     getContractsByStatus,
-    updateContractStatus
+    updateContractStatus,
+    acceptContract,
+    rejectContract,
+    completeContract,
+    submitContract,
+    cancelContract
  } from "../controllers/contract.controller";
 import { ContractAuthorization } from "../middleware/contract-authorization/contract-authorization";
 import { userSpecificContractAuthorization } from "../middleware/contract-authorization/contract-ownership-authorization";
@@ -37,12 +42,47 @@ contractRouter.delete('/delete-contract/:id',
     userSpecificContractAuthorization([userRoles.CLIENT]), 
     deleteContract)
 
-//just for the reminder. some status changed can only be executed by freelancer and some by client. Add that in authorization layer. 
+//just for the reminder. some status changed can only be executed by freelancer and some by client. Add that in authorization layer. Or better separate contract status updates 
 contractRouter.put('/update-status/:id', 
     updateContractValidator,
     authentication, 
     userSpecificContractAuthorization([userRoles.CLIENT, userRoles.FREELANCER]), 
     updateContractStatus)
+
+
+contractRouter.put('/accept-contract/:id', 
+    updateContractValidator,
+    authentication, 
+    userSpecificContractAuthorization([userRoles.FREELANCER]), 
+    acceptContract)
+
+contractRouter.get('/cancel-contract/:id',
+    updateContractValidator,
+    authentication,
+    userSpecificContractAuthorization([userRoles.CLIENT]),
+    cancelContract
+)
+
+contractRouter.put('/reject-contract/:id', 
+    updateContractValidator,
+    authentication, 
+    userSpecificContractAuthorization([userRoles.FREELANCER]), 
+    rejectContract)
+
+
+contractRouter.put('/submit-contract/:id',
+    updateContractValidator,
+    authentication,
+    userSpecificContractAuthorization([userRoles.FREELANCER]),
+    submitContract
+)
+contractRouter.put('/complete-contract/:id', 
+    updateContractValidator,
+    authentication, 
+    userSpecificContractAuthorization([userRoles.CLIENT]), 
+    completeContract)
+
+
 
 contractRouter.get('/get-client-contracts', 
     authentication,

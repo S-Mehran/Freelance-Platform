@@ -120,6 +120,69 @@ import { contractStatus } from "../enum/contract-status.enum"
         }
     )
 
+
+    export const acceptContract = catchAsync(
+        async(req: Request, res: Response) => {
+            const contractId = Number(req.params.id)
+            const status = req.body.contractStatus
+            const contract = await contractRepository.acceptContract(contractId, status)
+            if (!contract) {
+                return res.status(400).json({message: "Invalid contract transition"})
+            }                
+            return res.status(200).json(contract)
+        }
+    )
+
+    export const rejectContract = catchAsync(
+        async(req: Request, res: Response) => {
+            const contractId = Number(req.params.id)
+            const status = req.body.contractStatus
+            const contract = await contractRepository.rejectContract(contractId, status)
+            if (!contract) {
+                return res.status(400).json({message: "Invalid contract transition"})
+            }                
+            return res.status(200).json(contract)
+        }
+    )
+
+    export const completeContract = catchAsync(
+        async(req: Request, res: Response) => {
+            const contractId = Number(req.params.id)
+            const status = req.body.contractStatus
+            const contract = await contractRepository.completeContract(contractId, status)
+            if (!contract) {
+                return res.status(400).json({message: "Invalid contract transition"})
+            }                
+            return res.status(200).json(contract)
+        }
+    )
+
+
+    export const submitContract = catchAsync(
+        async(req: Request, res: Response) => {
+            const contractId = Number(req.params.id)
+            const status = req.body.contractStatus
+            const contract = await contractRepository.submitContract(contractId, status)
+            if (!contract) {
+                return res.status(400).json({message: "Invalid contract transition"})
+            }                
+            return res.status(200).json(contract)
+        }
+    )
+
+    export const cancelContract = catchAsync(
+        async(req: Request, res: Response) => {
+            const contractId = Number(req.params.id)
+            const status = req.body.contractStatus
+            const contract = await contractRepository.cancelContract(contractId, status)
+            if (!contract) {
+                return res.status(400).json({message: "Invalid contract transition"})
+            }                
+            return res.status(200).json(contract)
+        }
+    )
+    
+
     export const updateContractStatus = catchAsync(
         async(req: Request, res: Response) => {
             const contractId = Number(req.params.id)

@@ -23,13 +23,13 @@ export class CreateContractDto {
   @IsInt({ message: "Proposal ID must be an integer" })
   proposalId: number;
 
-  @Transform(({ value }) => {
-    if (value === "" || value === null || value === undefined) return value;
-    const num = Number(value);
-    return Number.isNaN(num) ? value : num;
-  })
-  @IsInt({ message: "Client ID must be an integer" })
-  clientId: number;
+  // @Transform(({ value }) => {
+  //   if (value === "" || value === null || value === undefined) return value;
+  //   const num = Number(value);
+  //   return Number.isNaN(num) ? value : num;
+  // })
+  // @IsInt({ message: "Client ID must be an integer" })
+  // clientId: number;
 
   @Transform(({ value }) => {
     if (value === "" || value === null || value === undefined) return value;

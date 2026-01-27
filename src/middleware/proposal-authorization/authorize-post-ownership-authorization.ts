@@ -16,10 +16,11 @@ export const userSpecificProposalAuthorization = (role: string) => {
         const userData = await userRepository.findById(user.id)
         console.log("User Data", userData)
         if (!userData || userData.role !== role) {
-            return res.status(403).json({message: `Sign up as ${userRoles.FREELANCER} to access this resource`})
+            return res.status(403).json({message: `Sign up as ${role} to access this resource`})
         }
 
-        const freelancerId = userData.freelancer.id
+        const freelancerId = userData.freelancer?.id
+        const clientId = userData.client?.id
 
         const proposalData = await proposalRepository.findById(Number(req.params.id))
         
@@ -28,10 +29,13 @@ export const userSpecificProposalAuthorization = (role: string) => {
         if (!proposalData) {
             return res.status(404).json({message: "Proposal not Found"})
         }
-        if (freelancerId!==proposalData.freelancer.id) {
+        if (freelancerId && freelancerId!==proposalData.freelancer.id) {
             return res.status(403).json({message: `Forbidden`})
         }
         
+        if (clientId && clientId!==proposalData.post.client.id) {
+            return res.status(403).json({message: `Forbidden`})
+        }
 
         console.log("auth6", req.body)
     next()

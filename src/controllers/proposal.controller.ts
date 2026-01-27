@@ -10,11 +10,12 @@ export class ProposalController{
     static async findProposalById(req: Request, res: Response) {
         try{
             const proposalId = Number(req.params.id)
+            console.log(req.params)
             const proposal = await proposalRepository.findById(proposalId)
             if (!proposal) return res.status(404).json({message: "Proposal not found"})
             return res.status(200).json({proposal})
         } catch(error) {
-            return res.status(500).json({message: "Unable to fetch proposal"})
+            return res.status(500).json({error})
         }
     }
 
