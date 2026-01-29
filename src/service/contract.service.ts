@@ -149,7 +149,7 @@ export class ContractService {
         clientId: clientId,
         status: status
       },
-      relations: ['client']
+      relations: ['freelancer', "freelancer.user", 'post']
     })
     return contracts
 
@@ -162,7 +162,7 @@ export class ContractService {
         freelancerId: freelancerId,
         status: status
       },
-      relations: ['freelancer']
+      relations: ['client', "client.user", 'post']
     })
     return contracts
 
@@ -274,7 +274,7 @@ export class ContractService {
       where: {
         id: contractId
       },
-      relations: ['client', 'freelancer', 'post']
+      relations: ['client', 'freelancer', 'post', 'freelancer.user', 'client.user']
     })
 
     return contract

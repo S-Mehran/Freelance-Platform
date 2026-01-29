@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import { clientRepository, contractRepository } from "../repository"
 import { catchAsync } from "../helpers/catch-async.helper"
 import { contractStatus } from "../enum/contract-status.enum"
+import { userRoles } from "../enum/user-roles.enum"
 
 
 
@@ -124,7 +125,8 @@ import { contractStatus } from "../enum/contract-status.enum"
     export const acceptContract = catchAsync(
         async(req: Request, res: Response) => {
             const contractId = Number(req.params.id)
-            const status = req.body.contractStatus
+            //const status = req.body.contractStatus
+            const status = contractStatus.ACTIVE
             const contract = await contractRepository.acceptContract(contractId, status)
             if (!contract) {
                 return res.status(400).json({message: "Invalid contract transition"})
@@ -136,7 +138,8 @@ import { contractStatus } from "../enum/contract-status.enum"
     export const rejectContract = catchAsync(
         async(req: Request, res: Response) => {
             const contractId = Number(req.params.id)
-            const status = req.body.contractStatus
+            // const status = req.body.contractStatus
+            const status = contractStatus.REJECTED
             const contract = await contractRepository.rejectContract(contractId, status)
             if (!contract) {
                 return res.status(400).json({message: "Invalid contract transition"})
@@ -148,7 +151,8 @@ import { contractStatus } from "../enum/contract-status.enum"
     export const completeContract = catchAsync(
         async(req: Request, res: Response) => {
             const contractId = Number(req.params.id)
-            const status = req.body.contractStatus
+            // const status = req.body.contractStatus
+            const status = contractStatus.COMPLETED
             const contract = await contractRepository.completeContract(contractId, status)
             if (!contract) {
                 return res.status(400).json({message: "Invalid contract transition"})
@@ -161,7 +165,8 @@ import { contractStatus } from "../enum/contract-status.enum"
     export const submitContract = catchAsync(
         async(req: Request, res: Response) => {
             const contractId = Number(req.params.id)
-            const status = req.body.contractStatus
+            // const status = req.body.contractStatus
+            const status = contractStatus.SUBMITTED
             const contract = await contractRepository.submitContract(contractId, status)
             if (!contract) {
                 return res.status(400).json({message: "Invalid contract transition"})
@@ -173,7 +178,8 @@ import { contractStatus } from "../enum/contract-status.enum"
     export const cancelContract = catchAsync(
         async(req: Request, res: Response) => {
             const contractId = Number(req.params.id)
-            const status = req.body.contractStatus
+            // const status = req.body.contractStatus
+            const status = contractStatus.CANCELLED
             const contract = await contractRepository.cancelContract(contractId, status)
             if (!contract) {
                 return res.status(400).json({message: "Invalid contract transition"})

@@ -24,12 +24,13 @@ import { updateContractValidator } from "../middleware/validators/update-contrac
 
 const contractRouter = express.Router()
 
-// Create Contract Routes - With auth and role-based authorization to prevent access errors
+// Create Contract Route - With auth and role-based authorization to prevent access errors
 contractRouter.post('/create-contract', 
     contractValidator,
     authentication, 
     ContractAuthorization([userRoles.CLIENT]), 
     createContract)
+
 
 contractRouter.put('/update-contract/:id', 
     updateContractValidator,
@@ -56,7 +57,7 @@ contractRouter.put('/accept-contract/:id',
     userSpecificContractAuthorization([userRoles.FREELANCER]), 
     acceptContract)
 
-contractRouter.get('/cancel-contract/:id',
+contractRouter.put('/cancel-contract/:id',
     updateContractValidator,
     authentication,
     userSpecificContractAuthorization([userRoles.CLIENT]),
@@ -81,8 +82,6 @@ contractRouter.put('/complete-contract/:id',
     authentication, 
     userSpecificContractAuthorization([userRoles.CLIENT]), 
     completeContract)
-
-
 
 contractRouter.get('/get-client-contracts', 
     authentication,
