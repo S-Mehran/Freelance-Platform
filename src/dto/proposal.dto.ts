@@ -16,21 +16,6 @@ import { proposalStatus } from "../enum/proposal-status.enum";
 
 export class CreateProposalDto {
   
-  @Transform(({ value }) => {
-    if (value === "" || value === null || value === undefined) return value;
-    const num = Number(value);
-    return Number.isNaN(num) ? value : num;
-  })
-  @IsInt({ message: "Post ID must be an integer" })
-  postId: number;
-
-  @Transform(({ value }) => {
-    if (value === "" || value === null || value === undefined) return value;
-    const num = Number(value);
-    return Number.isNaN(num) ? value : num;
-  })
-  @IsInt({ message: "Freelancer ID must be an integer" })
-  freelancerId: number;
 
   @IsString({ message: "Cover letter must be a string" })
   @IsNotEmpty({ message: "Cover letter is required" })

@@ -38,12 +38,14 @@ contractRouter.put('/update-contract/:id',
     userSpecificContractAuthorization([userRoles.CLIENT]), 
     updateContract)
 
+
+//Soft Delete
 contractRouter.delete('/delete-contract/:id',
     authentication, 
     userSpecificContractAuthorization([userRoles.CLIENT]), 
     deleteContract)
 
-//just for the reminder. some status changed can only be executed by freelancer and some by client. Add that in authorization layer. Or better separate contract status updates 
+
 contractRouter.put('/update-status/:id', 
     updateContractValidator,
     authentication, 

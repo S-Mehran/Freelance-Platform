@@ -9,7 +9,7 @@ export class PostService{
     async findById(id: number): Promise<Post | null> {
         return this.postRepository.findOne({ 
             where: {id},
-            relations: ['client'],
+            relations: ['client', 'client.user'],
          });
       }
 
