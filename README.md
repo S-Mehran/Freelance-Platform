@@ -28,6 +28,19 @@ It includes secure authentication using OTP, user role separation (Client, Freel
 
 ---
 
+```mermaid
+erDiagram
+    USERS ||--|| CLIENTS : "is a"
+    USERS ||--|| FREELANCERS : "is a"
+    CLIENTS ||--o{ POSTS : "creates"
+    POSTS ||--o{ PROPOSALS : "receives"
+    FREELANCERS ||--o{ PROPOSALS : "submits"
+    POSTS ||--o{ CONTRACTS : "governs"
+    FREELANCERS ||--o{ CONTRACTS : "signs"
+    CLIENTS ||--o{ CONTRACTS : "funds"
+    PROPOSALS ||--|| CONTRACTS : "becomes"
+```
+    
 ## 📸 API Testing Screenshots
 
 All test screenshots are stored inside:
